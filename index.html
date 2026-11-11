@@ -129,7 +129,7 @@ function mockSb(){
    insert:o=>run(()=>{db[t].push({id:uid(),created_at:now(),updated_at:now(),...o});save()}),
    update:o=>({eq:(k,v)=>run(()=>{db[t]=db[t].map(r=>r[k]===v?{...r,...o,updated_at:now()}:r);save()})}),
    delete:()=>({eq:(k,v)=>run(()=>{db[t]=db[t].filter(r=>r[k]!==v);save()})})}),
-  auth:{signInWithPassword:({email,password})=>(email.toLowerCase()==='admin@demo.com'&&password==='Admin@123')?(LS.set('demo_admin','1'),ok({})):fail('Invalid login credentials'),
+  auth:{signInWithPassword:({email,password})=>(email.toLowerCase()==='dinesh@gmail.com'&&password==='Dinesh@123')?(LS.set('demo_admin','1'),ok({})):fail('Invalid login credentials'),
    signOut:()=>{LS.del('demo_admin');return ok({})},updateUser:()=>fail('Password change is disabled in demo mode'),getSession:()=>ok({session:LS.get('demo_admin')?{}:null})},
   rpc:()=>ok(!!LS.get('demo_admin')),
   storage:{from:()=>({upload:(path,f)=>new Promise(res=>{if(f.size>1.5e6)return res({error:{message:'Demo mode: file must be under 1.5 MB'}});const r=new FileReader();r.onload=()=>{db.files[path]=r.result;try{save()}catch(e){delete db.files[path];return res({error:{message:'Demo storage is full'}})}res({error:null})};r.readAsDataURL(f)}),
@@ -251,7 +251,7 @@ async function toggle(table,id,k,v){const r=await sb.from(table).update({[k]:v})
 function showAdmin(){
  const A=$('#admin');A.classList.remove('hidden');
  if(!ADMIN){A.innerHTML=`<div class="card p-8 max-w-sm mx-auto mt-24"><h2 class="serif text-2xl font-bold text-blue-900 text-center">Agent Login</h2>
-  ${IS_DEMO?'<p class="mt-3 text-xs text-amber-700 bg-amber-50 p-2 rounded">Demo mode: no database configured (see config.js). Changes are saved only in this browser. Login: admin@demo.com / Admin@123</p>':''}
+  ${IS_DEMO?'<p class="mt-3 text-xs text-amber-700 bg-amber-50 p-2 rounded">Demo mode: no database configured (see config.js). Changes are saved only in this browser.</p>':''}
   <form id="lf"><label class="block text-sm mt-3">Email<input name="email" type="email" autocomplete="username" class="inp" required></label>
   <label class="block text-sm mt-2">Password<input name="password" type="password" autocomplete="current-password" class="inp" required></label>
   <button class="btn b1 w-full mt-4" id="lb">Sign in</button></form><a href="#home" class="block text-center text-sm text-blue-700 underline mt-4">← Back to site</a></div>`;
